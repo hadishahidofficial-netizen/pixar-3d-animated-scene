@@ -1,61 +1,67 @@
-<!doctype html><html lang='en'><head><meta charset='utf-8'>
-<meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>LVLS Agency — Email Flows Carousel</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>LVLS Agency — Carousel Preview</title>
 <style>
-:root{color-scheme:dark}
+:root{color-scheme:dark;--orange:#ff4d00}
 *{box-sizing:border-box}
-body{margin:0;background:#0b0b0c;color:#f5f3ee;
-font-family:ui-sans-serif,system-ui,'Segoe UI',Helvetica,Arial,sans-serif}
-header{padding:40px 28px 8px;max-width:1400px;margin:0 auto}
-h1{font-size:clamp(22px,3vw,34px);margin:0 0 6px;letter-spacing:-.02em}
-.sub{color:#a7a5a0;font-size:14px;line-height:1.6;margin:0 0 4px}
-.accent{color:#ff6a00;font-weight:700}
-section{max-width:1400px;margin:0 auto;padding:26px 28px 10px}
-h2{font-size:13px;letter-spacing:.22em;text-transform:uppercase;color:#a7a5a0;
-margin:0 0 14px;font-weight:600}
-.rail{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(220px,1fr);
-gap:16px;overflow-x:auto;padding-bottom:18px;scroll-snap-type:x mandatory}
-.rail img{width:100%;height:auto;display:block;border-radius:10px;
-border:1px solid rgba(255,255,255,.12);scroll-snap-align:start;background:#111}
-.cap{max-width:900px;background:#131315;border:1px solid rgba(255,255,255,.1);
-border-radius:12px;padding:18px 20px;white-space:pre-wrap;font-size:13.5px;
-line-height:1.75;color:#d8d5d0}
-footer{max-width:1400px;margin:0 auto;padding:26px 28px 60px;color:#6a6967;
-font-size:12px;letter-spacing:.08em;text-transform:uppercase}
-a{color:#ff6a00}
+body{margin:0;background:#0a0a0a;color:#f2f2f0;font-family:ui-sans-serif,system-ui,'Segoe UI',Helvetica,Arial,sans-serif}
+header{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:26px 28px 6px;max-width:1500px;margin:0 auto}
+h1{font-size:20px;margin:0;letter-spacing:.02em}
+h1 b{color:var(--orange)}
+.sub{color:#8a8a88;font-size:12.5px;letter-spacing:.14em;text-transform:uppercase}
+main{max-width:1500px;margin:0 auto;padding:10px 28px 0;display:grid;grid-template-columns:minmax(0,520px) minmax(0,1fr);gap:34px}
+@media(max-width:900px){main{grid-template-columns:1fr}}
+.stage{position:sticky;top:16px;align-self:start}
+.frame{position:relative;background:#111;border:1px solid #262626;border-radius:14px;overflow:hidden}
+.frame img{display:block;width:100%;height:auto;max-height:76vh;object-fit:contain;background:#0d0d0d}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:46px;height:46px;border-radius:50%;
+border:1px solid #333;background:rgba(10,10,10,.72);color:#fff;font-size:20px;cursor:pointer;
+display:flex;align-items:center;justify-content:center;user-select:none}
+.nav:hover{background:var(--orange);border-color:var(--orange);color:#0a0a0a}
+.nav.prev{left:12px}.nav.next{right:12px}
+.count{position:absolute;top:12px;right:14px;background:rgba(10,10,10,.72);border:1px solid #333;
+border-radius:999px;padding:4px 12px;font-size:12px;letter-spacing:.18em;color:#c9c9c6}
+.bar{display:flex;align-items:center;gap:10px;margin:12px 2px;flex-wrap:wrap}
+.dots{display:flex;gap:7px;flex:1;min-width:140px}
+.dot{height:7px;flex:1;border-radius:99px;background:#2c2c2c;cursor:pointer}
+.dot.on{background:var(--orange)}
+.btn{border:1px solid #333;background:#141414;color:#e8e8e5;border-radius:9px;padding:9px 14px;
+font-size:12px;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;cursor:pointer}
+.btn:hover{border-color:var(--orange);color:var(--orange)}
+.btn.solid{background:var(--orange);border-color:var(--orange);color:#0a0a0a;font-weight:700}
+.btn.solid:hover{filter:brightness(1.1);color:#0a0a0a}
+.side h2{font-size:12px;letter-spacing:.24em;text-transform:uppercase;color:#8a8a88;margin:22px 0 10px}
+.rail{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px}
+.rail button{padding:0;border:1px solid #242424;border-radius:9px;overflow:hidden;background:none;cursor:pointer}
+.rail button.on{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange)}
+.rail img{display:block;width:100%;height:auto}
+.cap{background:#121212;border:1px solid #242424;border-radius:12px;padding:16px 18px;
+white-space:pre-wrap;font-size:13px;line-height:1.7;color:#d6d3ce}
+footer{max-width:1500px;margin:0 auto;padding:26px 28px 60px;color:#6d6d6b;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
 </style></head><body>
-<header>
-<h1>LVLS Agency — <span class='accent'>5 email flows every clothing brand needs</span></h1>
-<p class='sub'>THU 15 OCT · 8:00 AM ET · 7 slides · CTA: Save + DM AUDIT<br>Rendered from code (Pillow) at 1080×1350, 1080×1080 and 1080×1920. Every size, theme and copy line is editable in <code>src/content.py</code> and <code>src/theme.py</code>.</p>
-</header>
-<section><h2>feed · 1080×1350 · dark — Instagram feed 4:5 — PRIMARY (minimal black edition)</h2><div class='rail'>
-<a href='feed/lvls-email-flows-feed-01.png' download><img src='feed/lvls-email-flows-feed-01.png' alt='Slide 1' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-02.png' download><img src='feed/lvls-email-flows-feed-02.png' alt='Slide 2' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-03.png' download><img src='feed/lvls-email-flows-feed-03.png' alt='Slide 3' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-04.png' download><img src='feed/lvls-email-flows-feed-04.png' alt='Slide 4' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-05.png' download><img src='feed/lvls-email-flows-feed-05.png' alt='Slide 5' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-06.png' download><img src='feed/lvls-email-flows-feed-06.png' alt='Slide 6' loading='lazy'></a>
-<a href='feed/lvls-email-flows-feed-07.png' download><img src='feed/lvls-email-flows-feed-07.png' alt='Slide 7' loading='lazy'></a>
-</div></section>
-<section><h2>square · 1080×1080 · dark — 1:1 fallback for feed-grid preview</h2><div class='rail'>
-<a href='square/lvls-email-flows-square-01.jpg' download><img src='square/lvls-email-flows-square-01.jpg' alt='Slide 1' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-02.jpg' download><img src='square/lvls-email-flows-square-02.jpg' alt='Slide 2' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-03.jpg' download><img src='square/lvls-email-flows-square-03.jpg' alt='Slide 3' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-04.jpg' download><img src='square/lvls-email-flows-square-04.jpg' alt='Slide 4' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-05.jpg' download><img src='square/lvls-email-flows-square-05.jpg' alt='Slide 5' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-06.jpg' download><img src='square/lvls-email-flows-square-06.jpg' alt='Slide 6' loading='lazy'></a>
-<a href='square/lvls-email-flows-square-07.jpg' download><img src='square/lvls-email-flows-square-07.jpg' alt='Slide 7' loading='lazy'></a>
-</div></section>
-<section><h2>story · 1080×1920 · dark — 9:16 for Stories / Reels cover</h2><div class='rail'>
-<a href='story/lvls-email-flows-story-01.jpg' download><img src='story/lvls-email-flows-story-01.jpg' alt='Slide 1' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-02.jpg' download><img src='story/lvls-email-flows-story-02.jpg' alt='Slide 2' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-03.jpg' download><img src='story/lvls-email-flows-story-03.jpg' alt='Slide 3' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-04.jpg' download><img src='story/lvls-email-flows-story-04.jpg' alt='Slide 4' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-05.jpg' download><img src='story/lvls-email-flows-story-05.jpg' alt='Slide 5' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-06.jpg' download><img src='story/lvls-email-flows-story-06.jpg' alt='Slide 6' loading='lazy'></a>
-<a href='story/lvls-email-flows-story-07.jpg' download><img src='story/lvls-email-flows-story-07.jpg' alt='Slide 7' loading='lazy'></a>
-</div></section>
-<section><h2>Caption (copy-paste)</h2><div class='cap'>Most clothing brands are running one welcome email and calling it a strategy.
+<header><h1>LVLS AGENCY — <b>5 EMAIL FLOWS</b> carousel preview</h1>
+<span class="sub">THU 15 OCT · 8:00 AM ET · 7 slides · save + DM AUDIT</span></header>
+<main>
+  <div class="stage">
+    <div class="frame">
+      <img id="shot" alt="carousel slide">
+      <div class="count" id="count">01 / 07</div>
+      <button class="nav prev" id="prev" aria-label="previous slide">&#8249;</button>
+      <button class="nav next" id="next" aria-label="next slide">&#8250;</button>
+    </div>
+    <div class="bar">
+      <div class="dots" id="dots"></div>
+      <a class="btn" id="dl" download>download slide</a>
+    </div>
+    <div class="bar"><span class="sub" id="decknote"></span></div>
+  </div>
+  <div class="side">
+    <h2>Decks</h2>
+    <div class="bar" id="deckbar" style="margin:0 0 14px"></div>
+    <h2>Slides in this deck</h2>
+    <div class="rail" id="rail"></div>
+    <h2>Caption (copy-paste)</h2>
+    <div class="cap">Most clothing brands are running one welcome email and calling it a strategy.
 
 Here are the 5 flows that actually carry revenue for a fashion brand — in the order we build them:
 
@@ -68,5 +74,50 @@ Here are the 5 flows that actually carry revenue for a fashion brand — in the 
 Save this. Send it to a founder still running one welcome email.
 DM "AUDIT" and we'll review your flows.
 
-#emailmarketing #klaviyo #ecommerce #fashionbrand #clothingbrand #emailflows #lifecyclemarketing #retention #ecommercemarketing #digitalmarketingagency #lvlsagency #directtoconsumer #shopify #marketingstrategy</div></section>
-<footer>LVLS Agency · email flows for fashion brands</footer></body></html>
+#emailmarketing #klaviyo #ecommerce #fashionbrand #clothingbrand #emailflows #lifecyclemarketing #retention #ecommercemarketing #digitalmarketingagency #lvlsagency #directtoconsumer #shopify #marketingstrategy</div>
+  </div>
+</main>
+<footer>LVLS Agency · email flows for fashion brands · rendered from code</footer>
+<script>
+const DECKS = [{"label": "feed", "note": "Instagram feed 4:5 \u2014 PRIMARY (minimal black edition)", "files": ["feed/lvls-email-flows-feed-01.png", "feed/lvls-email-flows-feed-02.png", "feed/lvls-email-flows-feed-03.png", "feed/lvls-email-flows-feed-04.png", "feed/lvls-email-flows-feed-05.png", "feed/lvls-email-flows-feed-06.png", "feed/lvls-email-flows-feed-07.png"], "size": "1080x1350"}, {"label": "square", "note": "1:1 fallback for feed-grid preview", "files": ["square/lvls-email-flows-square-01.jpg", "square/lvls-email-flows-square-02.jpg", "square/lvls-email-flows-square-03.jpg", "square/lvls-email-flows-square-04.jpg", "square/lvls-email-flows-square-05.jpg", "square/lvls-email-flows-square-06.jpg", "square/lvls-email-flows-square-07.jpg"], "size": "1080x1080"}, {"label": "story", "note": "9:16 for Stories / Reels cover", "files": ["story/lvls-email-flows-story-01.jpg", "story/lvls-email-flows-story-02.jpg", "story/lvls-email-flows-story-03.jpg", "story/lvls-email-flows-story-04.jpg", "story/lvls-email-flows-story-05.jpg", "story/lvls-email-flows-story-06.jpg", "story/lvls-email-flows-story-07.jpg"], "size": "1080x1920"}, {"label": "editorial", "note": "alternate edition \u2014 editorial dark (earlier direction)", "files": ["editorial/lvls-email-flows-editorial-01.png", "editorial/lvls-email-flows-editorial-02.png", "editorial/lvls-email-flows-editorial-03.png", "editorial/lvls-email-flows-editorial-04.png", "editorial/lvls-email-flows-editorial-05.png", "editorial/lvls-email-flows-editorial-06.png", "editorial/lvls-email-flows-editorial-07.png"], "size": "1080x1350"}, {"label": "editorial-light", "note": "alternate edition \u2014 editorial light", "files": ["editorial-light/lvls-email-flows-editorial-light-01.png", "editorial-light/lvls-email-flows-editorial-light-02.png", "editorial-light/lvls-email-flows-editorial-light-03.png", "editorial-light/lvls-email-flows-editorial-light-04.png", "editorial-light/lvls-email-flows-editorial-light-05.png", "editorial-light/lvls-email-flows-editorial-light-06.png", "editorial-light/lvls-email-flows-editorial-light-07.png"], "size": "1080x1350"}];
+let di = 0, si = 0;
+const $ = id => document.getElementById(id);
+function deck(){ return DECKS[di]; }
+function show(){
+  const f = deck().files[si];
+  $('shot').src = f;
+  $('count').textContent = String(si+1).padStart(2,'0') + ' / ' + String(deck().files.length).padStart(2,'0');
+  $('dl').href = f; $('dl').setAttribute('download', f.split('/').pop());
+  $('decknote').textContent = deck().label + ' · ' + deck().size + ' · ' + deck().note;
+  [...$('dots').children].forEach((d,i)=>d.classList.toggle('on', i===si));
+  [...$('rail').children].forEach((b,i)=>b.classList.toggle('on', i===si));
+}
+function setDeck(i){
+  di = i; si = 0;
+  $('deckbar').innerHTML = '';
+  DECKS.forEach((d,k)=>{
+    const b = document.createElement('button');
+    b.className = 'btn' + (k===di?' solid':'');
+    b.textContent = d.label;
+    b.onclick = ()=>{ setDeck(k); };
+    $('deckbar').appendChild(b);
+  });
+  $('dots').innerHTML = ''; $('rail').innerHTML = '';
+  deck().files.forEach((f,i)=>{
+    const d = document.createElement('div'); d.className='dot'; d.onclick=()=>{si=i;show();};
+    $('dots').appendChild(d);
+    const b = document.createElement('button'); b.onclick=()=>{si=i;show();};
+    const im = document.createElement('img'); im.src=f; im.loading='lazy';
+    b.appendChild(im); $('rail').appendChild(b);
+  });
+  show();
+}
+$('prev').onclick = ()=>{ si=(si-1+deck().files.length)%deck().files.length; show(); };
+$('next').onclick = ()=>{ si=(si+1)%deck().files.length; show(); };
+addEventListener('keydown', e=>{
+  if(e.key==='ArrowRight') $('next').click();
+  if(e.key==='ArrowLeft') $('prev').click();
+});
+setDeck(0);
+</script>
+</body></html>
