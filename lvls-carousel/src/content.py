@@ -1,6 +1,6 @@
 """Carousel copy + slide structure (Thu 15 Oct — LVLS Agency)."""
 
-HANDLE = "@yourhandle"          # <- swap for the real LVLS handle before export
+HANDLE = "@lvlsmarketing"      # <- swap for the real LVLS handle before export
 POST_DATE = "THU 15 OCT · 8:00 AM ET"
 TOTAL_FLOWS = 5
 
@@ -234,4 +234,83 @@ STORY_BEATS = [
     "05 Post-purchase — thank, teach, review",
     "06 Winback — newness, not discount",
     "07 CTA — save, share, DM AUDIT",
+]
+
+
+# ============================================================================
+# MINIMAL BLACK edition — the approved reference style (bottom-weighted)
+# ============================================================================
+MIN_SLIDES = [
+    {
+        "num": "01", "label": "EMAIL MARKETING", "icon": "flow",
+        "micro": ["THE LVLS CHECKLIST", "five flows · one revenue engine"],
+        "title": [[("5 EMAIL FLOWS", "w")],
+                  [("every clothing brand ", "w2"), ("needs.", "a2")]],
+        "lines": [],
+        "swipe": "Swipe for more",
+    },
+    {
+        "num": "02", "label": "EMAIL FLOW 01", "icon": "envelope",
+        "micro": ["FLOW 01 · WELCOME", "window: day 0–7 of subscriber life"],
+        "title": [[("WELCOME", "w")]],
+        "lines": [
+            [("Tell your brand story.", "w")],
+            [("Show your best sellers.", "w")],
+            [("Offer an incentive ", "w"), ("only if it fits.", "a")],
+        ],
+        "swipe": "Swipe",
+    },
+    {
+        "num": "03", "label": "EMAIL FLOW 02", "icon": "bag",
+        "micro": ["FLOW 02 · ABANDONED CART", "window: first 24 hours"],
+        "title": [[("ABANDONED ", "w"), ("CART", "a")]],
+        "lines": [
+            [("Remind them ", "w"), ("within hours.", "a")],
+            [("Show the exact product.", "w")],
+            [("Answer sizing and shipping.", "w")],
+        ],
+        "swipe": "Swipe",
+    },
+    {
+        "num": "04", "label": "EMAIL FLOW 03", "icon": "eye",
+        "micro": ["FLOW 03 · BROWSE ABANDONMENT", "window: day 1–3 after view"],
+        "title": [[("BROWSE ", "w"), ("ABANDONMENT", "a")]],
+        "lines": [
+            [("They viewed it, ", "w"), ("never added it.", "a")],
+            [("Follow up with that exact product.", "w")],
+        ],
+        "swipe": "Swipe",
+    },
+    {
+        "num": "05", "label": "EMAIL FLOW 04", "icon": "heart",
+        "micro": ["FLOW 04 · POST-PURCHASE", "trigger: delivery confirmed"],
+        "title": [[("POST-", "w"), ("PURCHASE", "a")]],
+        "lines": [
+            [("Thank them.", "w")],
+            [("Explain care and styling.", "w")],
+            [("Ask for a review ", "w"), ("after delivery.", "a")],
+        ],
+        "swipe": "Swipe",
+    },
+    {
+        "num": "06", "label": "EMAIL FLOW 05", "icon": "moon",
+        "micro": ["FLOW 05 · WINBACK", "trigger: one repurchase cycle quiet"],
+        "title": [[("WINBACK", "w")]],
+        "lines": [
+            [("Quiet for one repurchase cycle?", "w")],
+            [("Send something new, ", "w"), ("not a discount.", "a")],
+        ],
+        "swipe": "Swipe",
+    },
+    {
+        "num": "07", "label": "SAVE THIS", "icon": "bookmark",
+        "micro": ["FREE FLOW TEARDOWN", "48-hour turnaround"],
+        "title": [[("DM ", "w"), ("AUDIT", "a")]],
+        "lines": [
+            [("Send it to a founder still running one welcome email.", "w")],
+            [("Get a review of your flows.", "a")],
+        ],
+        "swipe": None,
+        "button": "DM \u201cAUDIT\u201d",
+    },
 ]

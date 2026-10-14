@@ -9,28 +9,35 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 import content  # noqa: E402
+import slides_min  # noqa: E402
 from slides import render_slide  # noqa: E402
 from theme import OUT_DIR  # noqa: E402
 
 SPECS = [
-    # (label, w, h, theme, ext, note)
-    ("feed", 1080, 1350, "dark", "png", "Instagram feed 4:5 — primary export"),
-    ("feed-light", 1080, 1350, "light", "png", "Instagram feed 4:5 — light alternate"),
-    ("square", 1080, 1080, "dark", "jpg", "1:1 fallback for feed-grid preview"),
-    ("story", 1080, 1920, "dark", "jpg", "9:16 for Stories / Reels cover"),
+    # (label, w, h, theme, ext, renderer, note)
+    ("feed", 1080, 1350, "dark", "png", "min",
+     "Instagram feed 4:5 — PRIMARY (minimal black edition)"),
+    ("square", 1080, 1080, "dark", "jpg", "min", "1:1 fallback for feed-grid preview"),
+    ("story", 1080, 1920, "dark", "jpg", "min", "9:16 for Stories / Reels cover"),
+    ("editorial", 1080, 1350, "dark", "png", "edit",
+     "alternate edition — editorial dark (earlier direction)"),
+    ("editorial-light", 1080, 1350, "light", "png", "edit",
+     "alternate edition — editorial light"),
 ]
 
 
 def build(variants=("feed",), out: Path = OUT_DIR):
     out.mkdir(parents=True, exist_ok=True)
     written = []
-    for label, w, h, theme, ext, note in SPECS:
+    for label, w, h, theme, ext, renderer, note in SPECS:
         if label not in variants:
             continue
         d = out / label
         d.mkdir(parents=True, exist_ok=True)
-        for i, sl in enumerate(content.SLIDES, start=1):
-            img = render_slide(sl, w, h, theme)
+        slides = content.MIN_SLIDES if renderer == "min" else content.SLIDES
+        for i, sl in enumerate(slides, start=1):
+            img = (slides_min.render_minimal(sl, w, h) if renderer == "min"
+                   else render_slide(sl, w, h, theme))
             p = d / f"lvls-email-flows-{label}-{i:02d}.{ext}"
             if ext == "png":
                 img.save(p, "PNG", optimize=True)
@@ -110,7 +117,7 @@ a{color:#ff6a00}
             "and <code>src/theme.py</code>.</p>",
             "</header>"]
     exts = {sp[0]: sp[4] for sp in SPECS}
-    for label, w, h, theme, ext, note in SPECS:
+    for label, w, h, theme, ext, renderer, note in SPECS:
         if label not in variants:
             continue
         html.append(f"<section><h2>{label} · {w}×{h} · {theme} — {note}</h2><div class='rail'>")
@@ -129,7 +136,7 @@ a{color:#ff6a00}
 
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
-    ap.add_argument("--variants", default="feed,feed-light,square,story",
+    ap.add_argument("--variants", default="feed,square,story,editorial,editorial-light",
                     help="comma list of: feed, feed-light, square, story")
     a = ap.parse_args()
     vs = tuple(v.strip() for v in a.variants.split(",") if v.strip())
@@ -137,6 +144,6 @@ if __name__ == "__main__":
     build(vs)
     proof_sheet(OUT_DIR, vs)
     for v in vs:
-        if v in ("feed", "feed-light"):
+        if v in ("feed", "editorial"):
             contact_sheet(OUT_DIR, v)
     print("done.")

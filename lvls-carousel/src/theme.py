@@ -73,6 +73,9 @@ _FONT_FILES = {
     "label": "Archivo-Medium.ttf",
     "num": "ArchivoCondensed-Bold.ttf",
     "serif": "InstrumentSerif-Italic.ttf",
+    "blk_it": "Archivo-BlackItalic.ttf",
+    "bold": "Archivo-Bold.ttf",
+    "cond_bi": "ArchivoCondensed-BoldItalic.ttf",
 }
 _cache: dict[tuple[str, int], ImageFont.FreeTypeFont] = {}
 
