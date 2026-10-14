@@ -1,0 +1,4 @@
+# rendered creative is regenerable — keep binaries out of git
+exports/
+__pycache__/
+*.pyc
