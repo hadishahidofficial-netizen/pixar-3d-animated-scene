@@ -7,82 +7,19 @@ Rendered at 2x and downsampled so the type stays crisp.
 
 All copy is fixed by the brief; nothing else is drawn.
 """
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
-ROOT = Path(__file__).resolve().parent.parent
-ASSETS = ROOT / "assets"
-FONTS = ASSETS / "fonts"
-OUT = ROOT / "output"
-OUT.mkdir(exist_ok=True)
-
-W, H = 1080, 1350
-SS = 2
-CW, CH = W * SS, H * SS
-
-# ---------------- palette ----------------
-BLACK = (10, 10, 10)          # #0A0A0A
-OFFWHITE = (243, 240, 236)    # primary type
-GREY = (150, 147, 144)        # furniture only
-RED = (232, 25, 29)           # #E8191D — the single accent
-
-MARGIN = 86                   # ~8% of 1080
-CONTENT_W = W - 2 * MARGIN    # 908
-
-
-def px(v):
-    return int(round(v * SS))
-
-
-def fbm(shape, octaves=6, seed=11, base=5):
-    """Multi-octave value noise (bilinear upsample), 0..1."""
-    rng = np.random.default_rng(seed)
-    h, w = shape
-    out = np.zeros(shape, np.float32)
-    amp, total = 1.0, 0.0
-    for o in range(octaves):
-        gh = max(2, base * 2 ** o)
-        gw = max(2, int(base * 2 ** o * w / h))
-        grid = rng.random((gh, gw)).astype(np.float32)
-        layer = np.asarray(
-            Image.fromarray((grid * 255).astype(np.uint8)).resize((w, h), Image.BICUBIC),
-            np.float32,
-        ) / 255.0
-        out += layer * amp
-        total += amp
-        amp *= 0.5
-    return out / total
-
-
-# ---------------- type helpers ----------------
-def font(path, size, weight=None):
-    f = ImageFont.truetype(str(FONTS / path), px(size))
-    if weight is not None:
-        f.set_variation_by_axes([14, weight])
-    return f
-
-
-def adv(f, text):
-    return f.getlength(text)
-
-
-def tracked_w(f, text, tr):
-    return sum(f.getlength(c) for c in text) + tr * max(0, len(text) - 1)
-
-
-def draw_tracked(d, xy, text, f, fill, tr, anchor="ms"):
-    """anchor: horizontal m/l/r + vertical baseline 's'."""
-    x, y = xy
-    w = tracked_w(f, text, tr)
-    if anchor[0] == "m":
-        x -= w / 2
-    elif anchor[0] == "r":
-        x -= w
-    for ch in text:
-        d.text((x, y), ch, font=f, fill=fill, anchor="ls")
-        x += f.getlength(ch) + tr
-    return w
+from poster_kit import (
+    ANTON, ASSETS, BLACK, CONTENT_W, CW, CH, FONTS, GREY, H, INTER, INTER_IT,
+    MARGIN, OFFWHITE, OUT, RED, SS, W, add_grain, draw_tracked, font, paper_field,
+    px, save, tracked_w,
+)
 
 
 # =========================================================
@@ -142,31 +79,10 @@ r = np.sqrt(((xx - 0.5) * 1.08) ** 2 + ((yy - 0.42) * 0.82) ** 2) / 0.72
 arr = arr * np.clip(1 - 0.40 * np.clip(r - 0.40, 0, 2) ** 1.4, 0, 1)[..., None]
 
 # =========================================================
-# 4. faint paper crumple + film grain  (all deltas in 8-bit units)
+# 4. faint paper crumple + film grain (shared with the black slides)
 # =========================================================
-height = fbm((CH, CW), octaves=6, seed=11, base=5)
-gy, gx = np.gradient(height)
-shade = 0.72 * gy + 0.38 * gx
-shade /= np.abs(shade).max() + 1e-6
-crumple = np.clip(0.5 + shade * 0.55, 0, 1)
-
-Y2, X2 = np.mgrid[0:CH, 0:CW].astype(np.float32)
-crease = np.zeros((CH, CW), np.float32)
-for ang, off, strength in [(0.55, 0.24, 0.55), (-0.30, 0.66, 0.40), (0.10, 0.86, 0.30)]:
-    dd = (X2 / CW) * np.sin(ang) + (Y2 / CH) * np.cos(ang) - off
-    crease += np.exp(-(dd ** 2) / (2 * 0.0016 ** 2)) * strength
-crease = np.clip(crease, 0, 1)
-
-texture = (crumple - 0.5) * 12.0 + (crease - 0.30) * 3.5   # 8-bit units
-arr = arr + (texture * 0.9)[..., None] / 255.0
-
-rng = np.random.default_rng(3)
-grain = rng.normal(0, 4.6, (CH, CW, 1)).repeat(3, axis=2)
-grain = np.asarray(
-    Image.fromarray(np.uint8(np.clip(grain + 128, 0, 255))).filter(ImageFilter.GaussianBlur(0.5)),
-    np.float32,
-) - 128.0
-arr = arr + grain / 255.0
+arr = arr + (paper_field(amplitude=12.0, crease_amp=3.5) * 0.9)[..., None] / 255.0
+arr = add_grain(np.clip(arr, 0, 1), sigma=4.6, seed=3)
 
 img = Image.fromarray(np.uint8(np.clip(arr, 0, 1) * 255 + 0.5), "RGB").convert("RGBA")
 
@@ -175,10 +91,6 @@ img = Image.fromarray(np.uint8(np.clip(arr, 0, 1) * 255 + 0.5), "RGB").convert("
 # =========================================================
 layer = Image.new("RGBA", (CW, CH), (0, 0, 0, 0))
 d = ImageDraw.Draw(layer)
-
-ANTON = "Anton-Regular.ttf"
-INTER = "Inter-Variable.ttf"
-INTER_IT = "Inter-Variable-Italic.ttf"
 
 line1, line2 = "6 HOOKS THAT", "STOP THE SCROLL"
 
@@ -276,7 +188,4 @@ draw_tracked(d, (px(MARGIN), px(FOOTER_BASE)), "@lvlsmarketing", fur, GREY + (23
 draw_tracked(d, (CW - px(MARGIN), px(FOOTER_BASE)), "1/8", fur, GREY + (235,), px(0.3), "rs")
 
 # =========================================================
-out = Image.alpha_composite(img, layer).convert("RGB").resize((W, H), Image.LANCZOS)
-out.save(OUT / "slide-01.png", optimize=True)
-out.resize((360, 450), Image.LANCZOS).save(OUT / "slide-01-thumb.png")
-print("saved", OUT / "slide-01.png")
+save(Image.alpha_composite(img, layer), "slide-01")
