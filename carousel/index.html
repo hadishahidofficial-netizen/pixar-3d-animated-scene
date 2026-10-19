@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>5 Email Flows — Carousel</title>
+<style>
+  @font-face{font-family:"Barlow Condensed";src:url("./fonts/BarlowCondensed-Bold.ttf") format("truetype");font-weight:700;font-style:normal;font-display:swap}
+  @font-face{font-family:"Barlow Condensed";src:url("./fonts/BarlowCondensed-BoldItalic.ttf") format("truetype");font-weight:700;font-style:italic;font-display:swap}
+  @font-face{font-family:"Barlow Condensed";src:url("./fonts/BarlowCondensed-SemiBold.ttf") format("truetype");font-weight:600;font-style:normal;font-display:swap}
+  @font-face{font-family:"Barlow";src:url("./fonts/Barlow-Regular.ttf") format("truetype");font-weight:400;font-style:normal;font-display:swap}
+  @font-face{font-family:"Barlow";src:url("./fonts/Barlow-Medium.ttf") format("truetype");font-weight:500;font-style:normal;font-display:swap}
+
+  :root{
+    --bg:#080808; --paper:#f4f1ec; --orange:#e95c24;
+    --grey:#8a857e; --line:rgba(244,241,236,.14);
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%}
+  body{
+    background:var(--bg); color:var(--paper);
+    font-family:"Barlow",system-ui,-apple-system,sans-serif;
+    display:flex; flex-direction:column; min-height:100dvh;
+    -webkit-font-smoothing:antialiased;
+  }
+  body::before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:0;
+    background:radial-gradient(60% 40% at 92% 8%, rgba(233,92,36,.22), transparent 70%);
+  }
+  header{
+    position:relative; z-index:2; display:flex; align-items:center; justify-content:space-between;
+    gap:16px; padding:22px clamp(16px,4vw,40px) 10px;
+  }
+  .brand{display:flex; align-items:center; gap:11px; font-weight:500; font-size:13px;
+    letter-spacing:.22em; text-transform:uppercase; color:rgba(244,241,236,.72)}
+  .brand i{width:11px; height:11px; background:var(--orange); display:block}
+  .handle{font-size:13px; letter-spacing:.06em; color:var(--grey)}
+
+  .stage{position:relative; z-index:1; flex:1; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:18px; padding:8px 16px 26px; min-height:0}
+
+  .rail{
+    display:flex; gap:16px; overflow-x:auto; scroll-snap-type:x mandatory;
+    width:100%; max-width:1180px; padding:6px max(6px, calc((100% - min(78vw, 430px)) / 2));
+    scrollbar-width:none; scroll-behavior:smooth;
+  }
+  .rail::-webkit-scrollbar{display:none}
+  .slide{
+    flex:0 0 auto; width:min(78vw, 430px); scroll-snap-align:center; position:relative;
+    border-radius:6px; overflow:hidden; box-shadow:0 30px 70px -30px rgba(0,0,0,.9),
+      0 0 0 1px rgba(244,241,236,.07);
+    transition:opacity .35s ease, transform .35s ease;
+    transform:scale(.965); opacity:.55;
+  }
+  .slide.active{transform:scale(1); opacity:1}
+  .slide img{display:block; width:100%; aspect-ratio:4/5; object-fit:cover}
+  .slide .n{
+    position:absolute; top:10px; left:10px; font-family:"Barlow Condensed";
+    font-weight:600; font-size:12px; letter-spacing:.14em; color:rgba(244,241,236,.85);
+    background:rgba(8,8,8,.55); border:1px solid rgba(244,241,236,.18);
+    padding:3px 8px; border-radius:3px; backdrop-filter:blur(4px);
+  }
+
+  .controls{display:flex; align-items:center; gap:18px; z-index:2}
+  .btn{
+    appearance:none; cursor:pointer; background:transparent; color:var(--paper);
+    border:1px solid var(--line); border-radius:999px; width:44px; height:44px;
+    display:grid; place-items:center; transition:.18s ease; font-size:16px;
+  }
+  .btn:hover{border-color:var(--orange); color:var(--orange)}
+  .dots{display:flex; align-items:center; gap:8px}
+  .dot{width:7px; height:7px; border-radius:50%; background:rgba(244,241,236,.24); cursor:pointer;
+    transition:.2s ease; border:0; padding:0}
+  .dot.on{background:var(--orange); width:22px; border-radius:999px}
+  .meta{display:flex; gap:10px; align-items:baseline; font-size:12px; letter-spacing:.18em;
+    text-transform:uppercase; color:var(--grey)}
+  .meta b{color:var(--paper); font-weight:500; font-family:"Barlow Condensed"; font-size:15px;
+    letter-spacing:.1em}
+
+  .sheet{max-width:1180px; width:100%; display:none; grid-template-columns:repeat(auto-fill,minmax(190px,1fr));
+    gap:14px; padding:0 4px}
+  .sheet img{width:100%; border-radius:4px; display:block; box-shadow:0 0 0 1px rgba(244,241,236,.08)}
+  body.grid .rail, body.grid .controls .dots, body.grid .arrows{display:none}
+  body.grid .sheet{display:grid}
+  .toggle{
+    font-family:"Barlow"; font-size:12px; letter-spacing:.18em; text-transform:uppercase;
+    color:var(--grey); background:none; border:0; border-bottom:1px solid transparent;
+    padding:4px 0; cursor:pointer;
+  }
+  .toggle:hover{color:var(--paper); border-color:var(--orange)}
+
+  .hint{font-size:12.5px; color:rgba(138,133,126,.85); letter-spacing:.02em}
+  .hint kbd{font-family:"Barlow"; border:1px solid var(--line); border-radius:4px;
+    padding:1px 5px; font-size:11px; color:rgba(244,241,236,.7)}
+
+  footer{
+    position:relative; z-index:2; display:flex; flex-wrap:wrap; gap:14px;
+    align-items:center; justify-content:space-between;
+    padding:0 clamp(16px,4vw,40px) 22px; font-size:12px; color:var(--grey);
+  }
+  footer a{color:rgba(244,241,236,.7); text-decoration:none; border-bottom:1px solid rgba(244,241,236,.2)}
+  footer a:hover{color:var(--orange); border-color:var(--orange)}
+
+  @media (max-width:640px){
+    .arrow{display:none}
+    .slide{width:min(84vw,430px)}
+    header{padding-top:16px}
+  }
+</style>
+</head>
+<body>
+  <header>
+    <div class="brand"><i></i>Clothing Brand Email</div>
+    <div class="handle">@lvlsmarketing</div>
+  </header>
+
+  <main class="stage">
+    <div class="rail" id="rail" aria-label="Carousel slides">
+      <figure class="slide"><span class="n">01</span><img src="./slide-01.png" alt="Slide 1 — 5 Email Flows" /></figure>
+      <figure class="slide"><span class="n">02</span><img src="./slide-02.png" alt="Slide 2 — Q4 is 35–40% of your year" loading="lazy" /></figure>
+      <figure class="slide"><span class="n">03</span><img src="./slide-03.png" alt="Slide 3 — The 5 flows" loading="lazy" /></figure>
+      <figure class="slide"><span class="n">04</span><img src="./slide-04.png" alt="Slide 4 — Timing beats copy" loading="lazy" /></figure>
+      <figure class="slide"><span class="n">05</span><img src="./slide-05.png" alt="Slide 5 — 3 emails, one cart" loading="lazy" /></figure>
+      <figure class="slide"><span class="n">06</span><img src="./slide-06.png" alt="Slide 6 — Don’t just survive Q4" loading="lazy" /></figure>
+      <figure class="slide"><span class="n">07</span><img src="./slide-07.png" alt="Slide 7 — Let’s build your Q4" loading="lazy" /></figure>
+    </div>
+
+    <div class="sheet" id="sheet"></div>
+
+    <div class="controls arrows">
+      <button class="btn" id="prev" aria-label="Previous slide">←</button>
+      <div class="dots" id="dots"></div>
+      <button class="btn" id="next" aria-label="Next slide">→</button>
+    </div>
+
+    <div class="meta"><span>4:5 · 1080×1350</span><b id="counter">1 / 7</b><span>PNG + JPG</span></div>
+    <p class="hint">Swipe, drag or use <kbd>←</kbd> <kbd>→</kbd> · <button class="toggle" id="toggle">View all 7</button></p>
+  </main>
+
+  <footer>
+    <span>Q4 email flows · 7 slides · 1080×1350</span>
+    <span>Text baked with Barlow Condensed · <a href="./caption.md">Caption &amp; posting notes</a></span>
+  </footer>
+
+<script>
+  const rail  = document.getElementById('rail');
+  const slides = [...rail.querySelectorAll('.slide')];
+  const dots  = document.getElementById('dots');
+  const counter = document.getElementById('counter');
+  let index = 0;
+
+  slides.forEach((_, i) => {
+    const b = document.createElement('button');
+    b.className = 'dot' + (i === 0 ? ' on' : '');
+    b.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+    b.onclick = () => go(i);
+    dots.appendChild(b);
+  });
+
+  function go(i){
+    index = Math.max(0, Math.min(slides.length - 1, i));
+    slides[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+    sync();
+  }
+  function sync(){
+    slides.forEach((s, i) => s.classList.toggle('active', i === index));
+    [...dots.children].forEach((d, i) => d.classList.toggle('on', i === index));
+    counter.textContent = (index + 1) + ' / ' + slides.length;
+  }
+  document.getElementById('prev').onclick = () => go(index - 1);
+  document.getElementById('next').onclick = () => go(index + 1);
+
+  // scroll position -> active slide
+  let frame;
+  rail.addEventListener('scroll', () => {
+    cancelAnimationFrame(frame);
+    frame = requestAnimationFrame(() => {
+      const mid = rail.scrollLeft + rail.clientWidth / 2;
+      let best = 0, bestD = Infinity;
+      slides.forEach((s, i) => {
+        const c = s.offsetLeft + s.offsetWidth / 2;
+        const d = Math.abs(c - mid);
+        if (d < bestD) { bestD = d; best = i; }
+      });
+      if (best !== index) { index = best; sync(); }
+    });
+  }, { passive: true });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(index + 1); }
+    if (e.key === 'ArrowLeft')  { e.preventDefault(); go(index - 1); }
+  });
+
+  // all-slides grid
+  const sheet = document.getElementById('sheet');
+  slides.forEach((s, i) => {
+    const fig = document.createElement('a');
+    fig.href = './slide-0' + (i + 1) + '.png';
+    fig.target = '_blank';
+    fig.innerHTML = '<img src="./slide-0' + (i + 1) + '.png" alt="Slide ' + (i + 1) + '" loading="lazy">';
+    sheet.appendChild(fig);
+  });
+  document.getElementById('toggle').onclick = (e) => {
+    document.body.classList.toggle('grid');
+    const on = document.body.classList.contains('grid');
+    e.currentTarget.textContent = on ? 'Back to slides' : 'View all 7';
+  };
+
+  // keyboard swipe + deep link
+  const hash = parseInt(location.hash.replace('#', ''), 10);
+  if (hash >= 1 && hash <= slides.length) go(hash - 1);
+  else sync();
+</script>
+</body>
+</html>
